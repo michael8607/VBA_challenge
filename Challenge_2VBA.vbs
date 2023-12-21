@@ -6,7 +6,7 @@ Dim change As Double
 Dim j As Integer
 Dim start As Long
 Dim row_count As Long
-Dim percentChange As Double
+Dim percent_change As Double
 Dim days As Integer
 Dim dailyChange As Double
 Dim averageChange As Double
@@ -37,7 +37,7 @@ row_count = ws.Cells(Rows.Count, "A").End(xlUp).Row
 
 For i = 2 To row_count
 
-' If ticker changes from one row to the next then
+' If changes from one row to the next then
     If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
     ' Store results in variable total
         total = total + ws.Cells(i, 7).Value
@@ -49,7 +49,7 @@ For i = 2 To row_count
             ws.Range("K" & 2 + j).Value = "%" & 0
             ws.Range("L" & 2 + j).Value = 0
         Else
-        ' Find First starting value greater than 0
+        ' Find First value greater than 0
             If ws.Cells(start, 3) = 0 Then
                 For find_value = start To i
                     If ws.Cells(find_value, 3).Value <> 0 Then
@@ -59,16 +59,16 @@ For i = 2 To row_count
                 Next find_value
             End If
 
-        ' Calculate Change between values
+        ' Calculate change 
             change = (ws.Cells(i, 6) - ws.Cells(start, 3))
-            percentChange = change / ws.Cells(start, 3)
-        ' start of the next stock
+            percent_change = change / ws.Cells(start, 3)
+        ' start the next stock
             start = i + 1
-        ' print results
+        ' print 
             ws.Range("I" & 2 + j).Value = ws.Cells(i, 1).Value
             ws.Range("J" & 2 + j).Value = change
             ws.Range("J" & 2 + j).NumberFormat = "0.00"
-            ws.Range("K" & 2 + j).Value = percentChange
+            ws.Range("K" & 2 + j).Value = percent_change
             ws.Range("K" & 2 + j).NumberFormat = "0.00%"
             ws.Range("L" & 2 + j).Value = total
 
@@ -93,7 +93,7 @@ For i = 2 To row_count
     End If
 Next i
 
-' take the max and min
+' max and min
     ws.Range("Q2") = "%" & WorksheetFunction.Max(ws.Range("K2:K" & row_count)) * 100
     ws.Range("Q3") = "%" & WorksheetFunction.Min(ws.Range("K2:K" & row_count)) * 100
     ws.Range("Q4") = WorksheetFunction.Max(ws.Range("L2:L" & row_count))
@@ -103,7 +103,7 @@ Next i
     decrease_number = WorksheetFunction.Match(WorksheetFunction.Min(ws.Range("K2:K" & row_count)), ws.Range("K2:K" & row_count), 0)
     volume_number = WorksheetFunction.Match(WorksheetFunction.Max(ws.Range("L2:L" & row_count)), ws.Range("L2:L" & row_count), 0)
 
-' final ticker symbol for  total, greatest % of increase and decrease, and average
+' final total ticker #, greatest diff between increase vs decrease, and the average
     ws.Range("P2") = ws.Cells(increase_number + 1, 9)
     ws.Range("P3") = ws.Cells(decrease_number + 1, 9)
     ws.Range("P4") = ws.Cells(volume_number + 1, 9)
